@@ -39,7 +39,7 @@ bash caption.sh
 ```
 
 ## Bash details
-
+```bash
 #!/bin/bash
 
 # =====================================================================================
@@ -68,4 +68,5 @@ python internvl_3_5_captioning.py \
    --prompts-json /home/kipyokim/internvl3.5/prompts.json \
    --use-sys-prompt False \
    --num_segments 16 \
+```
 ```

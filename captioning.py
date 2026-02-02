@@ -1,6 +1,7 @@
 import argparse
 import json
 import random
+import torch
 import os
 from transformers import AutoModel, AutoTokenizer, AutoProcessor
 from keye_vl_utils import process_vision_info
@@ -42,13 +43,12 @@ def main():
     print(f"Loading model from {model_path}...")
     model = AutoModel.from_pretrained(
     model_path,
-    torch_dtype="auto",
+    torch_dtype=torch.bfloat16,
     trust_remote_code=True,
     # flash_attention_2 is recommended for better performance
     attn_implementation="flash_attention_2",
+    device_map="auto"
     ).eval()
-
-    model.to("cuda")
 
     processor = AutoProcessor.from_pretrained(model_path, trust_remote_code=True)
 

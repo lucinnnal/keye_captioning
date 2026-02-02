@@ -1,0 +1,71 @@
+## Setting
+
+### 1. Conda Env
+```bash
+conda create -n keye_captioning python=3.10
+conda activate keye_captioning
+```
+
+### 3. Torch (CUDA 11.8)
+```bash
+pip install torch==2.7.0 torchvision==0.22.0 torchaudio==2.7.0 --index-url https://download.pytorch.org/whl/cu118
+```
+
+> 🔗 PyTorch previous version download guide: https://pytorch.org/get-started/previous-versions/
+
+### 4. Verification
+```bash
+python -c "import torch; print(torch.__version__, torch.cuda.is_available()); print(torch.version.cuda)"
+```
+
+### 5. Other Required Packages
+```bash
+pip install -r requirements.txt
+```
+
+### 6. Vision Processing Package
+```bash
+pip install --upgrade keye-vl-utils==1.5.2 -i https://pypi.org/simple
+```
+
+## Drive Mini Sample
+[Download Drive Mini Sample](https://drive.google.com/drive/folders/1ZZfkhpWVY-U36Y5e62geOWX-euE2JpJx?usp=drive_link)
+
+Move downloaded data to original folder data/
+
+## Run Captioning
+```bash
+bash caption.sh
+```
+
+## Bash details
+
+#!/bin/bash
+
+# =====================================================================================
+# Configurations
+# =====================================================================================
+# - Set the GPU devices to use. This value can be overridden by setting the environment
+#   variable when running the script (e.g., `CUDA_VISIBLE_DEVICES=1 ./caption.sh`).
+# - Multiple GPUs can be specified by separating them with commas (e.g., "0,1").
+# =====================================================================================
+export CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:-5, 6} 
+
+echo "Running captioning with CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES}"
+
+# Run the python script, passing all command-line arguments to it.
+#
+# Example usage:
+# ./caption.sh \
+#   --input-json-path "example_video_paths.json" \
+#   --output-json-path "results.json" \
+#   --model-name "OpenGVLab/InternVL3_5-8B"
+#
+python internvl_3_5_captioning.py \
+   --model-name "OpenGVLab/InternVL3_5-1B" \
+   --input-json-path video_eval_paths/L5_video_paths.json \
+   --output-json-path L5_internvl_output_captions.json \
+   --prompts-json /home/kipyokim/internvl3.5/prompts.json \
+   --use-sys-prompt False \
+   --num_segments 16 \
+```
